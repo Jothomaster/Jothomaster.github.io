@@ -1,0 +1,15 @@
+.cell{
+    width: 20px;
+    height: 20px;
+    margin: 0px;
+    background-size: contain;
+}
+.row{
+    display: flex;
+}
+.game{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    flex-shrink: 0;
+}
