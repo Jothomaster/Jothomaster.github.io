@@ -86,6 +86,13 @@ class Field{
                 started=false;
             }
         }
+        if(this.state==2){
+            this.state=0;
+            this.elem.style.backgroundImage="url(img/closed.svg)";
+            if(this.value==-1){
+                remaining++;
+            }
+        }
     }
 }
 
