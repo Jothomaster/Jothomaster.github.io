@@ -37,6 +37,6 @@ function start(){
 	t = 0;
 	g = document.getElementById("gravity").value;
 	H = Number(document.getElementById("height").value);
-	ball.y = H;
+	ball.y = H*10;
 	update();
 }
