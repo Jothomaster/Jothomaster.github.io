@@ -74,6 +74,7 @@ class Field{
         }
     }
     mark(){
+		console.log(this.state);
         if(this.state==0){
             this.elem.style.backgroundImage="url(img/flag.svg)";
             this.state=2;
@@ -85,6 +86,7 @@ class Field{
                 doCount=false;
                 started=false;
             }
+			return;
         }
         if(this.state==2){
             this.state=0;
@@ -92,6 +94,7 @@ class Field{
             if(this.value==-1){
                 remaining++;
             }
+			return;
         }
     }
 }
@@ -136,7 +139,6 @@ function generate()
             map[i][j].calcDeg();
         }
     }
-    console.table(map);
 }
 function timer(){
     if(doCount){
