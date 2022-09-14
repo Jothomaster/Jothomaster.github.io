@@ -9,16 +9,18 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>SAPER</h1>
-    <label for="n">Ilość rzędów: </label>
-    <input type="number" name="n" id="n">
-    <label for="m">Ilość kolumn: </label>
-    <input type="number" name="m" id="m">
-    <label for="bombs">Ilość bomb: </label>
-    <input type="number" name="bombs" id="bombs">
-    <input type="button" value="submit" onclick="generate()">
-    <div id="timer">0</div>
+	<div class="row"><h1>SAPER</h1></div>
+	<div class="top">
+		<label for="n">Ilość rzędów: </label>
+		<input type="number" name="n" id="n">
+		<label for="m">Ilość kolumn: </label>
+		<input type="number" name="m" id="m">
+		<label for="bombs">Ilość   bomb: </label>
+		<input type="number" name="bombs" id="bombs">
+		<input type="button" value="submit" onclick="generate()">
+	</div>
     <div class="game">
+    <div id="timer" class="row">0</div>
 
     </div>
 </body>

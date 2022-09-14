@@ -6,10 +6,23 @@
 }
 .row{
     display: flex;
+	justify-content: center;
 }
 .game{
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     flex-shrink: 0;
+}
+.top{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+}
+.top > *{
+	margin: 10px;
+}
+h1{
+	text-align: center;
 }

@@ -109,13 +109,15 @@ function generate()
 {
     started = true;
     time = -1;
-    document.getElementById("timer").innerText=0;
+    let timer = document.getElementById("timer");
+	timer.innerText=0;
     const board = document.querySelector(".game");
     n = document.querySelector("#n").value;
     m = document.querySelector("#m").value;
     k = document.querySelector("#bombs").value;
     remaining = k;
-    board.innerHTML = "";
+    board.innerHTML = ""
+	board.appendChild(timer);
     for(let i=0; i<n; ++i){
         let row = document.createElement("div");
         row.classList.add("row");
