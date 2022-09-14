@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Fizyka</title>
+	<link rel="stylesheet" href="style.css" media="all">
+	<script src="mind.js" defer></script>
+	<style>
+		canvas{
+			border: 1px solid black;
+		}
+	</style>
+</head>
+<body> 
+	<label for="force">F</label>
+	<input id="force" type="number" name="">
+	<br>
+	<label for="angle">&alpha;</label>
+	<input id="angle" type="number" name="">
+	<br>
+	<label for="height">H</label>
+	<input id="height" type="number" name="">
+	<br>
+	<label for="gravity">g</label>
+	<input id="gravity" type="number" name="">
+	<br>
+	<canvas id="canvas" width="1000" height="400">
+	</canvas>
+	<button onclick="start()">rozpocznij</button>
+</body>
+</html>
