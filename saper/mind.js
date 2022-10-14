@@ -1,11 +1,12 @@
-let map =[];
+let map = [];
 let n = 0;
 let m = 0;
 let k = 0;
-let time = -1;
-let doCount = false;
 let remaining = k;
-let started = false;
+let timeBeg = null;
+let timeEnd = null;
+let time = -1;
+let timerRunning = false;
 
 class Field{
     x;
@@ -14,6 +15,8 @@ class Field{
     value=0;
     elem;
     constructor(i,j){
+		this.click = function(){par.show()};
+		this.contextmenu = function(){par.mark();}
         this.state=0;
         this.value=0;
         this.elem = document.createElement("div");
@@ -22,20 +25,20 @@ class Field{
         this.x = i;
         this.y = j;
         const par = this;
-        this.elem.addEventListener("click",function(){par.show()});
-        this.elem.addEventListener("contextmenu",function(){par.mark();});
+        this.elem.addEventListener("click",this.click);
+        this.elem.addEventListener("contextmenu",this.contextmenu);
         this.elem.oncontextmenu=function(){return false;};
-        this.elem.onmouseup=function(){if(!doCount&&started){doCount=true; timer();}}
+        this.elem.onmouseup=function(){if(!timeBeg){timeBeg = Date.now(); if(!timerRunning){timer(); timerRunning=true};}}
     }
     show(){
         if(this.state==0){
             this.state=1;
             if(this.value==-1){
-                doCount=false;
                 this.elem.style.backgroundImage="url(img/mine_red.svg)"
-                started=false;
                 for(let i=0; i<n; ++i){
                     for(let j=0; j<m; ++j){
+						map[i][j].elem.removeEventListener("click",map[i][j].click);
+						map[i][j].elem.removeEventListener("contextmenu",map[i][j].contextmenu);
                         if(map[i][j].state==2&&map[i][j].value!=-1){
                             map[i][j].elem.style.backgroundImage="url(img/mine_wrong.svg)";
                         }
@@ -44,7 +47,7 @@ class Field{
                         }
                     }
                 }
-                alert("przegrałeś");
+				end(false);
             }
             else{
                 this.elem.style.backgroundImage=`url(img/type${this.value}.svg)`;
@@ -74,18 +77,17 @@ class Field{
         }
     }
     mark(){
-		console.log(this.state);
+		let cnt = document.querySelector("#remaining");
         if(this.state==0){
             this.elem.style.backgroundImage="url(img/flag.svg)";
             this.state=2;
             if(this.value==-1){
                 remaining--;
             }
-            if(remaining==0){
-                alert("Wygrałeś");
-                doCount=false;
-                started=false;
+            if(remaining==0&&cnt.innerText=="1"){
+				end(true);
             }
+			cnt.innerText = Number(cnt.innerText) - 1;
 			return;
         }
         if(this.state==2){
@@ -94,8 +96,9 @@ class Field{
             if(this.value==-1){
                 remaining++;
             }
-			return;
         }
+			cnt.innerText = Number(cnt.innerText) + 1;
+			return;
     }
 }
 
@@ -105,19 +108,48 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function setCookie(cname, cvalue, exdays) {
+  const d = new Date();
+  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+  let expires = "expires="+d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/; SameSite=Strict";
+}
+
+function getCookie(cname) {
+  let name = cname + "=";
+  let ca = document.cookie.split(';');
+  for(let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
 function generate()
 {
-    started = true;
-    time = -1;
+	timeBeg = null;
+	timeEnd = null;
+	time = -1;
     let timer = document.getElementById("timer");
 	timer.innerText=0;
     const board = document.querySelector(".game");
     n = document.querySelector("#n").value;
     m = document.querySelector("#m").value;
     k = document.querySelector("#bombs").value;
+	if(k>=n*m){
+		return;
+	}
     remaining = k;
+    let rem = document.querySelector("#remaining");
+	rem.innerText = remaining;
     board.innerHTML = ""
 	board.appendChild(timer);
+	board.appendChild(rem);
     for(let i=0; i<n; ++i){
         let row = document.createElement("div");
         row.classList.add("row");
@@ -131,9 +163,12 @@ function generate()
     }
     //console.log(map);
     for(let i=0; i<k; ++i){
-        const x = getRandomInt(0,n-1);
-        const y = getRandomInt(0,m-1);
-        map[x][y].value=-1;
+		let x,y;
+		do{
+        x = getRandomInt(0,n-1);
+        y = getRandomInt(0,m-1);
+		}while(map[x][y].value==-1);
+		map[x][y].value=-1;
     }
     //console.table(map);
     for(let i=0; i<n; ++i){
@@ -142,10 +177,40 @@ function generate()
         }
     }
 }
+
+function end(win){
+	timeEnd = Date.now();
+	for(let i=0; i<n; ++i){
+		for(let j=0; j<m; ++j){
+			map[i][j].elem.removeEventListener("click",map[i][j].click);
+			map[i][j].elem.removeEventListener("contextmenu",map[i][j].contextmenu);
+			map[i][j].elem.onmouseup=null;
+		}
+	}
+	time = -1;
+	if(win){
+		let winningTime = timeEnd - timeBeg;
+		let cname = `${n}x${m}x${k}`;
+		alert(`wygrales w czasie: ${winningTime}`)
+		let record = getCookie(cname);
+		const arr = ((record=="") ? [] : record.split("|"));
+		console.log(arr);
+		arr.push(winningTime);
+		arr.sort((a,b)=>(Number(a)>Number(b)));
+		setCookie(cname, arr.slice(0,10).join("|"), 365);
+	}
+	timeBeg = null;
+	timeEnd = null;
+}
+
 function timer(){
-    if(doCount){
+    if(timeBeg){
     time++;
     document.getElementById("timer").innerText=time;
     setTimeout(timer,1000);
     }
+	else{
+	timerRunning = false;
+	return;
+	}
 }
