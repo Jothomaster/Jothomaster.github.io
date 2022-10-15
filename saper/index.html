@@ -8,20 +8,29 @@
     <script src="mind.js" defer></script>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body onload="genMenu()">
+	<div class="header">
 	<div class="row"><h1>SAPER</h1></div>
 	<div class="top">
-		<label for="n">Ilość rzędów: </label>
-		<input type="number" name="n" id="n">
-		<label for="m">Ilość kolumn: </label>
-		<input type="number" name="m" id="m">
-		<label for="bombs">Ilość   bomb: </label>
-		<input type="number" name="bombs" id="bombs">
-		<input type="button" value="submit" onclick="generate()">
+		<div><label for="n">Ilość rzędów: </label>
+		<input type="number" name="n" id="n"></div>
+		<div><label for="m">Ilość kolumn: </label>
+		<input type="number" name="m" id="m"></div>
+		<div><label for="bombs">Ilość   bomb: </label>
+		<input type="number" name="bombs" id="bombs"></div>
+		<input type="button" value="wygeneruj" onclick="generate()">
+	</div>
+	<div class="wrapper">
+		Najlepsze wyniki w kategoriach:<br>
+	<ul class="menu">
+		
+	</ul>
+	<ul class="leaderboard">
+
+	</ul>
+	</div>
 	</div>
     <div class="game">
-    <div id="timer" class="row">0</div>
-	<div id="remaining" class="row">0</div>
     </div>
 </body>
 </html>

@@ -28,7 +28,7 @@ class Field{
         this.elem.addEventListener("click",this.click);
         this.elem.addEventListener("contextmenu",this.contextmenu);
         this.elem.oncontextmenu=function(){return false;};
-        this.elem.onmouseup=function(){if(!timeBeg){timeBeg = Date.now(); if(!timerRunning){timer(); timerRunning=true};}}
+        this.elem.onmousedown=function(){if(!timeBeg){timeBeg = Date.now(); if(!timerRunning){timer(); timerRunning=true};}}
     }
     show(){
         if(this.state==0){
@@ -135,8 +135,6 @@ function generate()
 	timeBeg = null;
 	timeEnd = null;
 	time = -1;
-    let timer = document.getElementById("timer");
-	timer.innerText=0;
     const board = document.querySelector(".game");
     n = document.querySelector("#n").value;
     m = document.querySelector("#m").value;
@@ -145,11 +143,9 @@ function generate()
 		return;
 	}
     remaining = k;
-    let rem = document.querySelector("#remaining");
-	rem.innerText = remaining;
     board.innerHTML = ""
-	board.appendChild(timer);
-	board.appendChild(rem);
+	board.innerHTML += '<div class="row">Czas gry: <div id="timer">0</div></div>';
+	board.innerHTML += `<div class="row" id="remaining_w">Pozostałe bomby: <div id="remaining">${remaining}</div></div>`;
     for(let i=0; i<n; ++i){
         let row = document.createElement("div");
         row.classList.add("row");
@@ -184,20 +180,22 @@ function end(win){
 		for(let j=0; j<m; ++j){
 			map[i][j].elem.removeEventListener("click",map[i][j].click);
 			map[i][j].elem.removeEventListener("contextmenu",map[i][j].contextmenu);
-			map[i][j].elem.onmouseup=null;
+			map[i][j].elem.onmousedown=null;
 		}
 	}
 	time = -1;
 	if(win){
 		let winningTime = timeEnd - timeBeg;
-		let cname = `${n}x${m}x${k}`;
-		alert(`wygrales w czasie: ${winningTime}`)
+		let cname = `${n}x${m}x${k}`;	
+		let nick = prompt("WYGRAŁEŚ! Podaj nick:");
 		let record = getCookie(cname);
 		const arr = ((record=="") ? [] : record.split("|"));
 		console.log(arr);
-		arr.push(winningTime);
-		arr.sort((a,b)=>(Number(a)>Number(b)));
+		arr.push(nick+"~"+winningTime);
+		arr.sort((a,b)=>(Number(a.split("~")[1])>Number(b.split("~")[1])));
 		setCookie(cname, arr.slice(0,10).join("|"), 365);
+		genMenu();
+		getTop(cname);
 	}
 	timeBeg = null;
 	timeEnd = null;
@@ -213,4 +211,33 @@ function timer(){
 	timerRunning = false;
 	return;
 	}
+}
+
+function getTop(name){
+	const lb = document.querySelector(".leaderboard");
+	lb.innerHTML = "";
+	const arr = getCookie(name).split("|");
+	arr.forEach(x => {
+		const sp = x.split("~");
+		const elem = document.createElement("li");
+		elem.innerText = `${sp[0]}: ${new Date(Number(sp[1])).toISOString().slice(14,23)}`;
+		lb.appendChild(elem);
+	});
+}
+
+function genMenu(){
+	let menu = document.querySelector(".menu");
+	menu.innerHTML = "";
+	let cats = document.cookie.split("; ");
+	cats = cats.map(x => x.split("=")[0]);
+	cats.forEach(x =>{
+		const elem = document.createElement("li");
+		elem.innerText = x;
+		elem.onmouseover = function(){getTop(x);};
+		elem.onmouseleave = function(){
+			const lb = document.querySelector(".leaderboard");
+			lb.innerHTML = "";
+		}
+		menu.appendChild(elem);
+	});
 }

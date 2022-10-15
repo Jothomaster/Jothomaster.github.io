@@ -1,6 +1,12 @@
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
 .cell{
-    width: 20px;
-    height: 20px;
+    width: 40px;
+    height: 40px;
     margin: 0px;
     background-size: contain;
 }
@@ -13,6 +19,10 @@
     flex-direction: column;
     flex-wrap: nowrap;
     flex-shrink: 0;
+	margin-top: 100px;
+	position: absolute;
+	left: 20vw;
+	overflow: scroll;
 }
 .top{
 	display: flex;
@@ -25,4 +35,39 @@
 }
 h1{
 	text-align: center;
+}
+.menu{
+	list-style-type: none;
+	display: inline-block;
+}
+.menu > li{
+	display: inline;
+	margin-right: 10px;
+	font-weight: normal;
+}
+.menu > li:hover{
+	color: blue;
+	font-weight: bold;
+}
+.leaderboard{
+	position: absolute;
+}
+body{
+	background-image: url("https://www.radiowroclaw.pl/img/articles/4947/1239806788.jpg");
+	background-size: cover;
+	background-repeat: no-repeat;
+	height: 100vh;
+}
+.wrapper, .leaderboard, .header{
+	background-color: rgba(255, 255, 255, 0.5);
+}
+.game *{
+	color: white;
+	text-shadow: 2px 2px 2px black;
+}
+*{
+	font-size: 1.3rem;
+}
+.wrapper, .menu{
+	width: 100vw;
 }
