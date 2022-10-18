@@ -20,8 +20,6 @@
     flex-wrap: nowrap;
     flex-shrink: 0;
 	margin-top: 100px;
-	position: absolute;
-	left: 20vw;
 	overflow: scroll;
 }
 .top{
@@ -44,6 +42,7 @@ h1{
 	display: inline;
 	margin-right: 10px;
 	font-weight: normal;
+	position: relative;
 }
 .menu > li:hover{
 	color: blue;
@@ -51,12 +50,12 @@ h1{
 }
 .leaderboard{
 	position: absolute;
+	left: 0;
 }
 body{
-	background-image: url("https://www.radiowroclaw.pl/img/articles/4947/1239806788.jpg");
-	background-size: cover;
-	background-repeat: no-repeat;
+	background-color: darkolivegreen;
 	height: 100vh;
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 .wrapper, .leaderboard, .header{
 	background-color: rgba(255, 255, 255, 0.5);
@@ -68,6 +67,9 @@ body{
 *{
 	font-size: 1.3rem;
 }
-.wrapper, .menu{
-	width: 100vw;
+body > *{
+	margin: 3%;
+}
+.leaderboard > li{
+	list-style-type: none;
 }

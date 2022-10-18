@@ -190,12 +190,10 @@ function end(win){
 		let nick = prompt("WYGRAŁEŚ! Podaj nick:");
 		let record = getCookie(cname);
 		const arr = ((record=="") ? [] : record.split("|"));
-		console.log(arr);
 		arr.push(nick+"~"+winningTime);
 		arr.sort((a,b)=>(Number(a.split("~")[1])>Number(b.split("~")[1])));
 		setCookie(cname, arr.slice(0,10).join("|"), 365);
 		genMenu();
-		getTop(cname);
 	}
 	timeBeg = null;
 	timeEnd = null;
@@ -213,9 +211,11 @@ function timer(){
 	}
 }
 
-function getTop(name){
-	const lb = document.querySelector(".leaderboard");
+function getTop(name,it){
+	const lb = document.createElement("ul");
 	lb.innerHTML = "";
+	it.appendChild(lb);
+	lb.classList.add("leaderboard");
 	const arr = getCookie(name).split("|");
 	arr.forEach(x => {
 		const sp = x.split("~");
@@ -233,10 +233,13 @@ function genMenu(){
 	cats.forEach(x =>{
 		const elem = document.createElement("li");
 		elem.innerText = x;
-		elem.onmouseover = function(){getTop(x);};
+		elem.classList.add();
+		elem.onmouseover = function(){getTop(x,elem);};
 		elem.onmouseleave = function(){
-			const lb = document.querySelector(".leaderboard");
-			lb.innerHTML = "";
+			const lb = document.querySelectorAll(".leaderboard");
+			lb.forEach(x => {
+				elem.removeChild(x);
+			});
 		}
 		menu.appendChild(elem);
 	});
