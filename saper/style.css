@@ -20,7 +20,6 @@
     flex-wrap: nowrap;
     flex-shrink: 0;
 	margin-top: 100px;
-	overflow: scroll;
 }
 .top{
 	display: flex;
